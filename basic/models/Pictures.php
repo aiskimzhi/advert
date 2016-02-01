@@ -44,7 +44,7 @@ class Pictures extends Advert
         $array = array_merge($arr1, $arr2);
 
         for ($i = 0; $i < count($array); $i++) {
-            $items[$i] =  Html::img($array[$i], ['class' => 'img-thumbnail']);
+            $items[$i] =  Html::img($array[$i], ['style' => 'max-width: 600px; max-height: 400px; margin: 0 auto;']);
         }
 
         return $items;

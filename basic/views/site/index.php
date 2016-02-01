@@ -2,20 +2,53 @@
 
 /* @var $this yii\web\View */
 use app\models\Pictures;
+use app\models\UploadForm;
 use yii\bootstrap\Carousel;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
+use yii\helpers\Url;
+use kartik\file\FileInput;
+use yii\web\UploadedFile;
+use yii\widgets\ActiveForm;
+
 
 $this->title = 'start again';
 $id = 1;
 $pic = new Pictures();
+$model = new UploadForm();
+
+var_dump(Yii::$app->params);
+echo '<br><br>';
+echo Yii::$app->params['maxPics'] . '<br><br>';
+$ext = 'kjhjka.png';
+$pos = strrpos($ext, '.');
+$t = substr($ext, $pos);
+var_dump($t);
+echo '<br><br>';
+var_dump(pathinfo($ext)['extension']);
 
 //$k = $pic->carouselItems(2, 1);
 //echo '<pre>';
 //var_dump($k);
 //echo '</pre>';
-?>
+echo '<br><br>';
+$form = ActiveForm::begin([]);
+echo $form->field($model, 'imageFile')->widget(FileInput::className(), [
+    'options' => ['accept' => 'image/*']
+]);
+ActiveForm::end();
 
+if (Yii::$app->request->isPost) {
+//    echo 'post'; die;
+    $model->imageFile = UploadedFile::getInstances($model, 'imageFile');
+    if ($model->upload()) {
+        echo 'file is uploaded'; die;
+    } else {
+        echo 'upload false'; die;
+    }
+}
+?>
+<br><br>
 <div class="gallery" style="width: 70%; overflow: hidden; position: relative; display: block;">
 
 <?php
@@ -48,7 +81,7 @@ $view = 'position: absolute;
 
 ?>
 
-<?php for ($i = 0; $i < count(scandir('img/page_' . $id)) - 2; $i++) : ?>
+<?php for ($i = 0; $i < 5; $i++) : ?>
     <div class="border" style="<?= $border ?>">
         <img src="<?= $pic->imgList($id)[$i] ?>" style="max-width: 150px; max-height: 150px;">
 
@@ -59,16 +92,20 @@ $view = 'position: absolute;
 
         <div id="view">
             <?php Modal::begin([
-                'header' => 'Picture',
+                'size' => 'modal-lg',
                 'toggleButton' => [
                     'label' => '<span class="glyphicon glyphicon-search" style="color: #f3dc0f; background-color: #000000;"></span>',
                     'style' => $view,
                 ],
+//                'options' => ['style' => 'width: 500px;']
             ]);
 
             $items = $pic->carouselItems($i, $id);
             echo Carousel::widget([
                 'items' => $items,
+                'options' => [
+                    'style' => 'width: 80%; height: 400px; margin: 0 auto;',
+                ],
             ]);
 
             Modal::end(); ?>
@@ -76,4 +113,22 @@ $view = 'position: absolute;
     </div>
 <?php endfor; ?>
 
+    <?php
+//    $items = $pic->carouselItems(0, $id);
+//    echo Carousel::widget([
+//        'items' => [
+//            [
+//                'content' => '<img src="/img/page_1/serd209.png" style="max-width: 300px; max-height: 200px; margin: 0 auto;">',
+//            ],
+//            [
+//                'content' => '<img src="/img/page_1/img_01.png" style="max-width: 300px; max-height: 200px; margin: 0 auto;">',
+//            ]
+//        ],
+//        'options' => [
+//            'style' => 'width: 300px; height: 200px;',
+//        ],
+//    ]);
+
+
+    ?>
 </div>

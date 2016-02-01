@@ -7,38 +7,32 @@ use yii\web\UploadedFile;
 
 class UploadForm extends Model
 {
-    public $imageFile;
+    /**
+     * @var UploadedFile
+     */
+    public $imageFiles;
+    public $avatar;
 
     public function rules()
     {
         return [
-            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png', 'checkExtensionByMimeType' => false],
+            [['imageFiles'], 'image', 'skipOnEmpty' => false,
+                'extensions' => 'png, jpg',
+                'maxFiles' => 10,
+                'checkExtensionByMimeType'=>false,
+            ],
         ];
     }
 
-    public function upload($id) {
+    public function upload()
+    {
         if ($this->validate()) {
-            if (file_exists('img/page_' . $id)) {
-                if (scandir('img/page_' . $id) > 2) {
-                    $i = count(scandir('img/page_' . $id)) - 1;
-                    $n = intval(substr(scandir('img/page_' . $id)[$i], -6, 2)) + 1;
-                    if ($n < 10) {
-                        $this->imageFile->saveAs('img/page_' . $id . '/img_0' . $n . '.png');
-                        return true;
-                    } else {
-                        $this->imageFile->saveAs('img/page_' . $id . '/img_' . $n . '.png');
-                        return true;
-                    }
-                } else {
-                    $this->imageFile->saveAs('img/page_' . $id . '/img_01.png');
-                    return true;
-                }
-            } else {
-                mkdir('img/page_' . $id);
-                $this->imageFile->saveAs('img/page_' . $id . '/img_01.png');
-                return true;
+            foreach ($this->imageFiles as $file) {
+                $file->saveAs('img/' . $file->baseName . '.' . $file->extension);
             }
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 }

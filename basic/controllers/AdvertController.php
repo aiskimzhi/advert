@@ -18,6 +18,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\Url;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -121,7 +122,6 @@ class AdvertController extends Controller
                     ]);
                 }
             }
-
             return $this->render('view-my-advert', [
                 'model' => $this->findModel($id),
                 'imgModel' => $imgModel,
@@ -148,6 +148,24 @@ class AdvertController extends Controller
         }
     }
 
+    public function actionFileUpload($id)
+    {
+//        VarDumper::dump($_POST, true);
+//        die;
+        //$model = $this->findModel($id);
+        $pic = new Pictures();
+        $imgModel = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $imgModel->imageFile = UploadedFile::getInstance($imgModel, 'imageFile');
+            if ($imgModel->upload($id)) {
+                echo Json::encode(['upload'=>'true']);
+            }
+        }
+
+        echo Json::encode(['upload'=>'false']);
+
+    }
     /**
      * Updates an existing Advert model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -317,5 +335,55 @@ class AdvertController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+//        $user = User::findOne(['id' => Yii::$app->user->id]);
+//
+//        $catList = ArrayHelper::map(Category::find()->asArray()->all(), 'id', 'name');
+//        $subcatList = ArrayHelper::map(Subcategory::find()->asArray()->all(), 'id', 'name');
+//        $regionList = ArrayHelper::map(Region::find()->asArray()->all(), 'id', 'name');
+//        $cityList = ArrayHelper::map(City::find()->asArray()->all(), 'id', 'name');
+//
+//        $adv = new Advert();
+
+        if (Yii::$app->request->isPost) {
+            $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
+            if ($model->upload()) {
+                // file is uploaded successfully
+                return $this->render('upload', ['model' => $model]);
+            }
+        }
+
+//        if ($adv->load(Yii::$app->request->post())) {
+//            if ($adv->createAdvert()) {
+//                return $this->redirect(['my-adverts']);
+//            }
+//
+//            return $this->render('upload', [
+//                'model' => $model,
+//                'adv' => $adv,
+//                'user' => $user,
+//                'catList' => $catList,
+//                'subcatList' => $subcatList,
+//                'regionList' => $regionList,
+//                'cityList' => $cityList,
+//            ]);
+//        }
+//
+//        return $this->render('upload',
+//            [
+//                'model' => $model,
+//                'adv' => $adv,
+//                'user' => $user,
+//                'catList' => $catList,
+//                'subcatList' => $subcatList,
+//                'regionList' => $regionList,
+//                'cityList' => $cityList,
+//            ]);
+
+        return $this->render('upload', ['model' => $model]);
     }
 }
