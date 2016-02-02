@@ -1,5 +1,6 @@
 <?php
 
+use kartik\file\FileInput;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
@@ -9,6 +10,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Advert */
 /* @var $user app\models\User */
+/* @var $pic app\models\UploadForm */
 
 $this->title = 'Create Advert';
 ?>
@@ -101,11 +103,12 @@ $this->title = 'Create Advert';
     <?= $form->field($model, 'price')->textInput() ?>
 </div>
 
+<!--
 <div style="margin-left: 100px">
 <?php $msg = 'You will be able to upload images after you finish creating your advert'; ?>
 <?= Html::tag('div', $msg, ['class' => 'btn btn-info']) ?>
 <br><br>
-
+-->
 <?= '<div class="form-group">' . Html::submitButton('Create Advert', ['class' => 'btn btn-success']) . '</div>' ?>
 </div>
 

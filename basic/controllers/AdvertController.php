@@ -107,14 +107,17 @@ class AdvertController extends Controller
         $imgModel = new UploadForm();
 
         if ($model->user_id == Yii::$app->user->identity->getId()) {
+//            echo 'my'; die;
 
             if (isset($_POST['delete'])) {
                 $model->deletePic();
             }
 
             if (Yii::$app->request->isPost) {
-                $imgModel->imageFile = UploadedFile::getInstance($imgModel, 'imageFile');
+//                echo 'post'; die;
+                $imgModel->imageFiles = UploadedFile::getInstances($imgModel, 'imageFiles');
                 if ($imgModel->upload($id)) {
+//                    echo 'upload'; die;
                     return $this->render('view-my-advert', [
                         'model' => $this->findModel($id),
                         'imgModel' => $imgModel,
@@ -246,6 +249,7 @@ class AdvertController extends Controller
     public function actionCreate()
     {
         $user = User::findOne(['id' => Yii::$app->user->id]);
+//        $pic = new UploadForm();
 
         $catList = ArrayHelper::map(Category::find()->asArray()->all(), 'id', 'name');
         $subcatList = ArrayHelper::map(Subcategory::find()->asArray()->all(), 'id', 'name');
@@ -255,12 +259,14 @@ class AdvertController extends Controller
         $model = new Advert();
 
         if ($model->load(Yii::$app->request->post())) {
+//            $pic->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
             if ($model->createAdvert()) {
-                return $this->redirect(['my-adverts']);
+                return $this->redirect(['upload']);
             }
 
             return $this->render('create', [
                 'model' => $model,
+//                'pic' => $pic,
                 'user' => $user,
                 'catList' => $catList,
                 'subcatList' => $subcatList,
@@ -272,6 +278,7 @@ class AdvertController extends Controller
         return $this->render('create',
             [
                 'model' => $model,
+//                'pic' => $pic,
                 'user' => $user,
                 'catList' => $catList,
                 'subcatList' => $subcatList,
@@ -340,49 +347,22 @@ class AdvertController extends Controller
     public function actionUpload()
     {
         $model = new UploadForm();
-//        $user = User::findOne(['id' => Yii::$app->user->id]);
-//
-//        $catList = ArrayHelper::map(Category::find()->asArray()->all(), 'id', 'name');
-//        $subcatList = ArrayHelper::map(Subcategory::find()->asArray()->all(), 'id', 'name');
-//        $regionList = ArrayHelper::map(Region::find()->asArray()->all(), 'id', 'name');
-//        $cityList = ArrayHelper::map(City::find()->asArray()->all(), 'id', 'name');
-//
-//        $adv = new Advert();
+        $advert = Advert::find()
+        ->where(['user_id' => Yii::$app->user->identity->getId()])
+        ->orderBy('id DESC')
+        ->asArray()
+        ->one();
+        $id = $advert['id'];
+//        var_dump($id); die;
 
         if (Yii::$app->request->isPost) {
+//            echo 'post'; die;
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
-            if ($model->upload()) {
+            if ($model->upload($id)) {
                 // file is uploaded successfully
                 return $this->render('upload', ['model' => $model]);
             }
         }
-
-//        if ($adv->load(Yii::$app->request->post())) {
-//            if ($adv->createAdvert()) {
-//                return $this->redirect(['my-adverts']);
-//            }
-//
-//            return $this->render('upload', [
-//                'model' => $model,
-//                'adv' => $adv,
-//                'user' => $user,
-//                'catList' => $catList,
-//                'subcatList' => $subcatList,
-//                'regionList' => $regionList,
-//                'cityList' => $cityList,
-//            ]);
-//        }
-//
-//        return $this->render('upload',
-//            [
-//                'model' => $model,
-//                'adv' => $adv,
-//                'user' => $user,
-//                'catList' => $catList,
-//                'subcatList' => $subcatList,
-//                'regionList' => $regionList,
-//                'cityList' => $cityList,
-//            ]);
 
         return $this->render('upload', ['model' => $model]);
     }

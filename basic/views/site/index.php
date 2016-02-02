@@ -15,7 +15,13 @@ use yii\widgets\ActiveForm;
 $this->title = 'start again';
 $id = 1;
 $pic = new Pictures();
-$model = new UploadForm();
+
+echo '<pre>';
+$k = scandir('img/page_1');
+$m = array_splice($k, 2);
+print_r($m);
+echo '</pre>';
+die;
 
 var_dump(Yii::$app->params);
 echo '<br><br>';
@@ -32,21 +38,7 @@ var_dump(pathinfo($ext)['extension']);
 //var_dump($k);
 //echo '</pre>';
 echo '<br><br>';
-$form = ActiveForm::begin([]);
-echo $form->field($model, 'imageFile')->widget(FileInput::className(), [
-    'options' => ['accept' => 'image/*']
-]);
-ActiveForm::end();
 
-if (Yii::$app->request->isPost) {
-//    echo 'post'; die;
-    $model->imageFile = UploadedFile::getInstances($model, 'imageFile');
-    if ($model->upload()) {
-        echo 'file is uploaded'; die;
-    } else {
-        echo 'upload false'; die;
-    }
-}
 ?>
 <br><br>
 <div class="gallery" style="width: 70%; overflow: hidden; position: relative; display: block;">
@@ -132,3 +124,8 @@ $view = 'position: absolute;
 
     ?>
 </div>
+
+<form action="" method="post">
+    <?= Html::submitButton($span, ['name' => 'name', 'value' => 'value', 'style' => $del]) ?>
+    <!-- <input type="submit" name="delete" value=""> -->
+</form>
