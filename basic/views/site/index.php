@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
+use app\models\Bookmark;
 use app\models\Pictures;
 use app\models\UploadForm;
 use yii\bootstrap\Carousel;
@@ -15,13 +16,15 @@ use yii\widgets\ActiveForm;
 $this->title = 'start again';
 $id = 1;
 $pic = new Pictures();
+$bookmark = Bookmark::find()->where([
+    'user_id' => Yii::$app->user->identity->getId(),
+    'advert_id' => 11
+])->one();
+$k = $bookmark->delete();
 
 echo '<pre>';
-$k = scandir('img/page_1');
-$m = array_splice($k, 2);
-print_r($m);
+var_dump($k);
 echo '</pre>';
-die;
 
 var_dump(Yii::$app->params);
 echo '<br><br>';

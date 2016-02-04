@@ -70,10 +70,15 @@ $view = 'position: absolute;
         border-color: #f3dc0f;
         margin-right: 5px;';
 
+if (file_exists('img/page_' . $model->id)) {
+    $img = count(scandir('img/page_' . $model->id)) - 2;
+} else {
+    $img = 0;
+}
 ?>
 
 <div style="max-width: 800px">
-<?php for ($i = 0; $i < count(scandir('img/page_' . $model->id)) - 2; $i++) : ?>
+<?php for ($i = 0; $i < $img; $i++) : ?>
     <div class="border" style="<?= $border ?>">
         <img src="<?= $pic->imgList($model->id)[$i] ?>" style="max-width: 150px; max-height: 150px;">
 

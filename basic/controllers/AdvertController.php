@@ -132,6 +132,14 @@ class AdvertController extends Controller
             ]);
         } else {
             $views = new Views();
+            $bookmark = new Bookmark();
+            $n = Bookmark::find()->where(['user_id' => Yii::$app->user->identity->getId(), 'advert_id' => $id])->all();
+
+            if (!empty($n)) {
+                $value = 'Delete ' . 'from bookmarks';
+            } else {
+                $value = 'Add to bookmarks';
+            }
 
             if (!$views->countViews($id)) {
                 if ($model->user_id !== Yii::$app->user->identity->getId()) {
@@ -147,6 +155,7 @@ class AdvertController extends Controller
                 'model' => $this->findModel($id),
                 'pic' => $pic,
                 'imgModel' => $imgModel,
+                'value' => $value
             ]);
         }
     }
@@ -303,8 +312,7 @@ class AdvertController extends Controller
             foreach($subcats as $subcat){
                 echo "<option value='".$subcat->id."'>".$subcat->name."</option>";
             }
-        }
-        else{
+        } else {
             echo "<option></option>";
         }
         echo Json::encode(['output'=>'', 'selected'=>'']);
