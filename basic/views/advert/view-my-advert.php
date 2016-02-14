@@ -99,10 +99,8 @@ if (file_exists('img/page_' . $model->id)) {
                         'style' => $view,
                         'onclick' => 'carouselOpen(' . $i . ')',
                     ],
-//                'options' => ['style' => 'width: 500px;']
                 ]);
 
-                echo $i;
                 $items = $pic->carouselItems($i, $_GET['id']);
                 echo Carousel::widget([
                     'id' => 'car' . $i,

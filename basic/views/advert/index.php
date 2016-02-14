@@ -154,4 +154,3 @@ $this->title = 'Adverts';
     ]) ?>
 </div>
 </div>
-

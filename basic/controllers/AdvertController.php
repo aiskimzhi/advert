@@ -400,7 +400,8 @@ class AdvertController extends Controller
         $advert = Advert::findOne(['id' => $id]);
         $advert->avatar = $_POST['img'];
         if ($advert->save()) {
-            echo 'disabled';
+            return true;
         }
+        return false;
     }
 }

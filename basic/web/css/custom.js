@@ -77,23 +77,10 @@ function getImage(i)
 function setAvatar(id, i)
 {
     var sel1 = '#avatar_' + i;
-    var sel2 = '#av_' + i;
     var p = $(sel1).attr('value');
     $.ajax({
         url: 'modal?id=' + id,
         type: 'post',
         data: 'img=' + p
     });
-}
-
-function getImageDel(i)
-{
-    var sel = 'div#car' + i + ' div div.active img';
-    var sel2 = '#avatar_' + i;
-    var im = $(sel).attr('src');
-    var a = [];
-    a = im.split('/');
-    var l = a.length;
-    var e = l - 1;
-    return $(sel2).attr('value', a[e]);
 }

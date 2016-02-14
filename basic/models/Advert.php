@@ -261,8 +261,13 @@ class Advert extends ActiveRecord
 
     public function picture($id)
     {
+        $advert = Advert::findOne(['id' => $id]);
+
         if (file_exists('img/page_' . $id)) {
             if (count(scandir('img/page_' . $id)) > 2) {
+                if ($advert->avatar !== null) {
+                    return substr($advert->avatar, 1);
+                }
                 return 'img/page_' . $id . '/' . scandir('img/page_' . $id)[2];
             }
         }
