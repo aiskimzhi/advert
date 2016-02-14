@@ -32,7 +32,8 @@ AppAsset::register($this);
         'brandLabel' => 'My Company',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-my navbar-fixed-top',
+//            'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     if (Yii::$app->user->isGuest) {
@@ -52,7 +53,7 @@ AppAsset::register($this);
         ];
     }
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+        'options' => ['class' => 'navbar-nav navbar-right hohoho'],
         'items' => $items,
     ]);
     NavBar::end();
@@ -67,14 +68,14 @@ AppAsset::register($this);
         <?= $content ?>
     </div>
 </div>
-
+<!--
 <pre>
     POST:
     <?php print_r($_POST); ?>
     GET:
     <?php print_r($_GET); ?>
 </pre>
-
+-->
 
 <footer class="footer">
     <div class="container">

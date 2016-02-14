@@ -12,7 +12,7 @@ use yii\helpers\Url;
 $this->title = 'My Adverts';
 
 echo '<h2>My Adverts</h2>';
-echo Html::a('Create Advert', [Url::toRoute('advert/create')], ['class' => 'btn btn-success']);
+echo Html::a('Create Advert', [Url::toRoute('advert/create')], ['class' => 'btn btn-primary']);
 
 echo '<br><br>';
 

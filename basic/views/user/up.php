@@ -28,7 +28,7 @@ $this->title = 'Update data';
         <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label(false) ?>
         <?= $form->field($model, 'phone')->textInput(['maxlength' => true])->label(false) ?>
         <?= $form->field($model, 'skype')->textInput(['maxlength' => true])->label(false) ?>
-        <?= Html::submitButton('Update', ['class' => 'btn but btn-create', 'id' => 'but-sub']) ?>
+        <?= Html::submitButton('Update', ['class' => 'btn but btn-primary', 'id' => 'but-sub']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

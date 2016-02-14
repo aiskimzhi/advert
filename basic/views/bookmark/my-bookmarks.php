@@ -7,8 +7,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\AdvertSearch */
+/* @var $searchModel app\models\BookmarkSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $advert app\models\Advert */
 
 $this->title = 'My Bookmarks';
 ?>
@@ -28,8 +29,11 @@ $this->title = 'My Bookmarks';
             'label' => 'image',
             'format' => 'raw',
             'value' => function($searchModel) {
-                $url = 'img/page_' . $searchModel->advert_id . '/img_01.PNG';
-                return Html::img(Yii::$app->urlManager->createAbsoluteUrl($url));
+                return Html::img(Yii::$app->urlManager
+                    ->createAbsoluteUrl($searchModel->picture($searchModel->advert_id)), [
+                    'width' => 120,
+                    'height' => 120
+                ]);
             },
             'options' => ['style' => 'width: 130px; max-width: 130px;'],
         ],

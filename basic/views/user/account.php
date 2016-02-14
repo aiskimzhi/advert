@@ -26,7 +26,7 @@ $this->title = 'My Account';
             [Url::toRoute('user/change-password')],
             ['class' => 'btn btn-info my-200'])?>
         <?= Html::a('Delete account', ['delete-account'], [
-            'class' => 'btn btn-info my-200',
+            'class' => 'btn btn-info my-200 my-del',
             'data' => [
                 'confirm' => 'Are you sure you want to delete your account?',
                 'method' => 'post',
@@ -44,7 +44,7 @@ $this->title = 'My Account';
 
     <div id="create-adv">
         <?= Html::a('Create Advert', [Url::toRoute('advert/create')],
-            ['class' => 'btn btn-create btn-cr-adv']) ?>
+            ['class' => 'btn btn-primary btn-cr-adv']) ?>
     </div>
 
 </div>

@@ -152,7 +152,7 @@ class AdvertController extends Controller
             ]);
         } else {
             $views = new Views();
-            $bookmark = new Bookmark();
+//            $bookmark = new Bookmark();
             $n = Bookmark::find()->where(['user_id' => Yii::$app->user->identity->getId(), 'advert_id' => $id])->all();
 
             if (!empty($n)) {
@@ -288,14 +288,12 @@ class AdvertController extends Controller
         $model = new Advert();
 
         if ($model->load(Yii::$app->request->post())) {
-//            $pic->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
             if ($model->createAdvert()) {
                 return $this->redirect(['upload']);
             }
 
             return $this->render('create', [
                 'model' => $model,
-//                'pic' => $pic,
                 'user' => $user,
                 'catList' => $catList,
                 'subcatList' => $subcatList,
@@ -381,10 +379,8 @@ class AdvertController extends Controller
         ->asArray()
         ->one();
         $id = $advert['id'];
-//        var_dump($id); die;
 
         if (Yii::$app->request->isPost) {
-//            echo 'post'; die;
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
             if ($model->upload($id)) {
                 // file is uploaded successfully

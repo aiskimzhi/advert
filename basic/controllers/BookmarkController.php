@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Advert;
 use Yii;
 use app\models\Bookmark;
 use app\models\BookmarkSearch;

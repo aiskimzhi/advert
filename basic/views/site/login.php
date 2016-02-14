@@ -16,13 +16,11 @@ $this->title = 'Login';
 
         <?= $form->field($model, 'email')->textInput(['placeholder' => 'E-mail'])->label(false) ?>
         <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Password'])->label(false) ?>
-        <?= $form->field($model, 'rememberMe')->checkbox([
-//            'template' => "<div>{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ]) ?>
+        <?= $form->field($model, 'rememberMe')->checkbox([]) ?>
 
         <div class="form-group">
                 <?= Html::submitButton('<strong>Login</strong>', [
-                    'class' => 'btn btn-primary but btn-create', 'name' => 'login-button'
+                    'class' => 'btn btn-primary', 'name' => 'login-button', 'style' => 'width: 100%;'
                 ]) ?>
         </div>
 

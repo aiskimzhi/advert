@@ -84,7 +84,7 @@ $this->title = 'Adverts';
         'options' => ['class' => 'form-control', 'style' => 'width: 220px;']
     ]) ?>
     <?= Html::submitButton('Other period', [
-        'class' => 'btn btn-create',
+        'class' => 'btn btn-primary',
         'name' => 'period',
         'value' => 'period'
     ]) ?>
@@ -93,7 +93,7 @@ $this->title = 'Adverts';
 
 <div>
     <?= Html::submitButton('Search', [
-        'class' => 'btn btn-create',
+        'class' => 'btn btn-primary',
         'name' => 'search',
         'value' => 'search'
     ]) ?>
