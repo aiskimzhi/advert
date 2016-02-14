@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\bootstrap\Carousel;
 use yii\bootstrap\Modal;
+use yii\db\ActiveRecord;
 use yii\helpers\Html;
 use yii\web\UploadedFile;
 use yii\base\Model;
@@ -24,6 +25,7 @@ use yii\base\Model;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $views
+ * @property string $avatar
  *
  * @property Category $category
  * @property City $city
@@ -32,7 +34,7 @@ use yii\base\Model;
  * @property User $user
  * @property Bookmark[] $bookmarks
  */
-class Advert extends \yii\db\ActiveRecord
+class Advert extends ActiveRecord
 {
     public $imageFile;
 
@@ -159,16 +161,6 @@ class Advert extends \yii\db\ActiveRecord
         $advert->save();
     }
 
-    public function picture($id)
-    {
-        if (file_exists('img/page_' . $id)) {
-            if (count(scandir('img/page_' . $id)) > 2) {
-                return 'img/page_' . $id . '/' . scandir('img/page_' . $id)[2];
-            }
-        }
-        return 'img/default.png';
-    }
-
     public function renderAllPics($id)
     {
         if (file_exists('img/page_' . $id)) {
@@ -183,7 +175,20 @@ class Advert extends \yii\db\ActiveRecord
 
     public function deletePic()
     {
-        unlink('img/page_' . $_GET['id'] . '/' . $_POST['delete']);
+        $advert = Advert::findOne(['id' => $_GET['id']]);
+        $un = substr($_POST['delete'], 1);
+
+//        var_dump($_POST['delete'] == $advert->avatar); die;
+        if ($_POST['delete'] == $advert->avatar) {
+            $advert->avatar = null;
+            if ($advert->save()) {
+                unlink($un);
+            }
+        }
+
+        if ($_POST['delete'] == $advert->avatar) {
+            unlink($un);
+        }
     }
 
     public function th()
@@ -252,5 +257,15 @@ class Advert extends \yii\db\ActiveRecord
             ]);
         }
         return null;
+    }
+
+    public function picture($id)
+    {
+        if (file_exists('img/page_' . $id)) {
+            if (count(scandir('img/page_' . $id)) > 2) {
+                return 'img/page_' . $id . '/' . scandir('img/page_' . $id)[2];
+            }
+        }
+        return 'img/default.png';
     }
 }

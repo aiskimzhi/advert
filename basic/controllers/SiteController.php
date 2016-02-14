@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Advert;
+use app\models\ContactAuthor;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 use app\models\SignupForm;
+use app\models\User;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
@@ -98,21 +101,66 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    public function actionContact()
+    public function actionSendEmail()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        $model = new SendEmailForm();
 
-            return $this->refresh();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                Yii::$app->getSession()->setFlash('warning', 'Check email');
+//                var_dump($model->sendEmail()); die;
+                $model->sendEmail();
+                return $this->goHome();
+            } else {
+                Yii::$app->getSession()->setFlash('error', 'Cannot send email');
+            }
         }
-        return $this->render('contact', [
+
+        return $this->render('sendEmail', [
             'model' => $model,
         ]);
     }
 
-    public function actionAbout()
+    public function actionResetPassword()
     {
-        return $this->render('about');
+        $model = new ResetPasswordForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->validate()) {
+                $model->resetPassword();
+                Yii::$app->getSession()->setFlash('error', 'Your password was changed successfully.');
+                return $this->goHome();
+            }
+        }
+
+        return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionContactAuthor($id)
+    {
+        $model = new ContactAuthor();
+        $receiver = Advert::findOne(['id' => $id]);
+        $sender = User::findOne(['id' => Yii::$app->user->identity->getId()]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->sendEmail(
+                $sender->email,
+                $receiver->user->email,
+                $model->subject,
+                $receiver,
+                $model
+            )) {
+                Yii::$app->getSession()->setFlash('success', 'Your email was sent successfully');
+                return $this->redirect(['advert/view?id=' . $id]);
+            }
+        }
+
+        return $this->render('contact', [
+            'model' => $model,
+            'receiver' => $receiver,
+            'sender' => $sender,
+        ]);
     }
 }

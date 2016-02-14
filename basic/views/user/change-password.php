@@ -9,6 +9,7 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Password Change'
 ?>
+
 <div class="user-change-password">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -22,4 +23,4 @@ $this->title = 'Password Change'
         </div>
     <?php ActiveForm::end(); ?>
 
-</div><!-- user-change-password -->
+</div>

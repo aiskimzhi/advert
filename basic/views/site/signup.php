@@ -12,9 +12,16 @@ $this->title = 'Sign Up';
 ?>
 <div class="site-signup">
 
-    <div class="form-group sign-form">
+    <div style="width: 40%; float: left; margin-left: 5%;">
         <h3><strong>Create account</strong></h3>
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin([
+            'fieldConfig' => [
+                'template' => "{input}\n{error}",
+                'horizontalCssClasses' => [
+                    'error' => '',
+                ],
+            ],
+        ]); ?>
 
         <?= $form->field($model, 'first_name')->textInput(['placeholder' => 'Enter your first name'])->label(false) ?>
         <?= $form->field($model, 'last_name')->textInput(['placeholder' => 'Enter your last name'])->label(false) ?>
@@ -24,12 +31,13 @@ $this->title = 'Sign Up';
         <?= $form->field($model, 'skype')->textInput(['placeholder' => 'Enter your skype'])->label(false) ?>
         <?= $form->field($model, 'phone')->textInput(['placeholder' => 'Enter your phone number'])->label(false) ?>
 
-        <?= Html::submitButton('Sign Up', ['class' => 'btn btn-primary but btn-create']) ?>
+        <?= Html::submitButton('<strong>Sign Up</strong>', ['class' => 'btn btn-primary but btn-create']) ?>
 
         <?php ActiveForm::end(); ?>
     </div>
 
-    <div class="info-left">
+    <div style="width: 40%; float: left; margin-left: 10%;">
+        <br><br><br>
         After you sign up you will be able to: <br><br>
         <table>
             <tr>
@@ -59,5 +67,6 @@ $this->title = 'Sign Up';
             </tr>
         </table>
     </div>
+
 </div>
 

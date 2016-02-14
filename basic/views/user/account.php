@@ -12,12 +12,19 @@ $this->title = 'My Account';
 
 <div class="account">
 
-
     <div id="left-menu">
-        <?= Html::a('My Adverts', [Url::toRoute('advert/my-adverts')], ['class' => 'btn btn-info my-200']) ?>
-        <?= Html::a('My Bookmarks', [Url::toRoute('bookmark/my-bookmarks')], ['class' => 'btn btn-info my-200'])?>
-        <?= Html::a('Update data', [Url::toRoute('user/update-data')], ['class' => 'btn btn-info my-200']) ?>
-        <?= Html::a('Change password', [Url::toRoute('user/change-password')], ['class' => 'btn btn-info my-200'])?>
+        <?= Html::a('My Adverts',
+            [Url::toRoute('advert/my-adverts')],
+            ['class' => 'btn btn-info my-200']) ?>
+        <?= Html::a('My Bookmarks',
+            [Url::toRoute('bookmark/my-bookmarks')],
+            ['class' => 'btn btn-info my-200'])?>
+        <?= Html::a('Update data',
+            [Url::toRoute('user/update-data')],
+            ['class' => 'btn btn-info my-200']) ?>
+        <?= Html::a('Change password',
+            [Url::toRoute('user/change-password')],
+            ['class' => 'btn btn-info my-200'])?>
         <?= Html::a('Delete account', ['delete-account'], [
             'class' => 'btn btn-info my-200',
             'data' => [
@@ -36,8 +43,8 @@ $this->title = 'My Account';
     </div>
 
     <div id="create-adv">
-        <?= Html::a('Create Advert', [Url::toRoute('advert/create')], ['class' => 'btn btn-create btn-cr-adv']) ?>
+        <?= Html::a('Create Advert', [Url::toRoute('advert/create')],
+            ['class' => 'btn btn-create btn-cr-adv']) ?>
     </div>
-
 
 </div>

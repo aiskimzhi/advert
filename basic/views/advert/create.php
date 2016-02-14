@@ -14,8 +14,8 @@ use yii\widgets\DetailView;
 
 $this->title = 'Create Advert';
 ?>
+<!-- I am not sure yet if it's necessary to show contact information
 <div>
-
     <?= DetailView::widget([
     'model' => $user,
     'options' => [
@@ -47,55 +47,59 @@ $this->title = 'Create Advert';
         ],
     ]
 ]) ?>
-
-</div>
+</div> -->
 <br>
 
 <?php $form = ActiveForm::begin(['id' => 'create-advert-form']); ?>
 
-<div class="dropdown-create">
-<?= $form->field($model, 'category_id')->dropDownList($catList,
-    [
-        'prompt'   => '- Choose a Category -',
-        'onchange' => '
-                        $.ajax({
-                            url: "' . Url::toRoute('get-subcat?id=') . '" + $(this).val(),
-                            success: function( data ) {
-                                $( "#' . Html::getInputId($model, 'subcategory_id') . '" ).html( data ).attr("disabled", false);
-                            }
-                        });
-                       '
-    ])->label(false) ?>
+<!-- <div class="dropdown-create"> -->
+<div class="form-inline">
+    <?= $form->field($model, 'category_id')->dropDownList($catList,
+        [
+            'prompt'   => '- Choose a Category -',
+            'style' => 'width: 300px; margin-left: 100px;',
+            'onchange' => '
+                            $.ajax({
+                                url: "' . Url::toRoute('get-subcat?id=') . '" + $(this).val(),
+                                success: function( data ) {
+                                    $( "#' . Html::getInputId($model, 'subcategory_id') . '" )
+                                    .html( data ).attr("disabled", false);
+                                }
+                            });
+                           '
+        ])->label(false) ?>
 
-
-<?= $form->field($model, 'subcategory_id')
-    ->dropDownList(
-        ['id' => '- Choose a Sub-category -'],
-        [ 'disabled' => 'disabled']
-    )->label(false) ?>
-
-<?= $form->field($model, 'region_id')->dropDownList($regionList,
-    [
-        'prompt'   => '- Choose a Region -',
-        'onchange' => '
-                        $.ajax({
-                            url: "' . Url::toRoute('get-city?id=') . '" + $(this).val(),
-                            success: function( data ) {
-                                $( "#' . Html::getInputId($model, 'city_id') . '" ).html( data ).attr("disabled", false);
-                            }
-                        });
-                       '
-    ])->label(false) ?>
-
-
-<?= $form->field($model, 'city_id')
-    ->dropDownList(
-        ['id' => '- Choose a City -'],
-        [ 'disabled' => 'disabled']
-    )->label(false) ?>
+    <?= $form->field($model, 'subcategory_id')
+        ->dropDownList(
+            ['id' => '- Choose a Sub-category -'],
+            [ 'disabled' => 'disabled', 'style' => 'width: 300px;']
+        )->label(false) ?>
 </div>
 
-<div style="margin-left: 100px; margin-right: 100px">
+<div class="form-inline">
+    <?= $form->field($model, 'region_id')->dropDownList($regionList,
+        [
+            'prompt'   => '- Choose a Region -',
+            'style' => 'width: 300px; margin-left: 100px;',
+            'onchange' => '
+                            $.ajax({
+                                url: "' . Url::toRoute('get-city?id=') . '" + $(this).val(),
+                                success: function( data ) {
+                                    $( "#' . Html::getInputId($model, 'city_id') . '" )
+                                    .html( data ).attr("disabled", false);
+                                }
+                            });
+                           '
+        ])->label(false) ?>
+
+    <?= $form->field($model, 'city_id')
+        ->dropDownList(
+            ['id' => '- Choose a City -'],
+            [ 'disabled' => 'disabled', 'style' => 'width: 300px;']
+        )->label(false) ?>
+</div>
+
+<div style="margin-left: 100px; margin-right: 100px;">
     <?= $form->field($model, 'title')->textInput() ?>
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
@@ -103,13 +107,8 @@ $this->title = 'Create Advert';
     <?= $form->field($model, 'price')->textInput() ?>
 </div>
 
-<!--
-<div style="margin-left: 100px">
-<?php $msg = 'You will be able to upload images after you finish creating your advert'; ?>
-<?= Html::tag('div', $msg, ['class' => 'btn btn-info']) ?>
-<br><br>
--->
-<?= '<div class="form-group">' . Html::submitButton('Create Advert', ['class' => 'btn btn-success']) . '</div>' ?>
+<div class="form-group">
+    <?= Html::submitButton('Create Advert', ['class' => 'btn btn-success', 'style' => 'margin-left: 100px;']) ?>
 </div>
 
 <?php ActiveForm::end(); ?>

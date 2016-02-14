@@ -32,18 +32,29 @@ $this->title = $model->title;
 </div>
 
 
-<?php
-//var_dump($pic->imgList($model->id)[0]); die;
-$form = ActiveForm::begin([
+<?php $form = ActiveForm::begin([
     'options' => ['enctype' => 'multipart/form-data'],
-]);
-echo $form->field($imgModel, 'imageFiles[]')->widget(FileInput::classname(), [
+]) ?>
+
+<?= $form->field($imgModel, 'imageFiles[]')->widget(FileInput::classname(), [
     'options' => ['multiple' => true],
     'pluginOptions' => ['previewFileType' => 'any']
-])->label('Add images');
-ActiveForm::end();
+])->label('Add images') ?>
 
-$border = 'float: left;
+<?php ActiveForm::end(); ?>
+
+<?php
+if (file_exists('img/page_' . $model->id)) {
+    $img = count(scandir('img/page_' . $model->id)) - 2;
+} else {
+    $img = 0;
+}
+?>
+
+<div class="gallery" style="width: 70%; overflow: hidden; position: relative; display: block;">
+
+    <?php
+    $border = 'float: left;
         border: solid;
         border-width: 1px;
         border-color: #808080;
@@ -52,7 +63,7 @@ $border = 'float: left;
         position: relative;
         margin-right: 5px;
         margin-bottom: 5px;';
-$del = 'position: absolute;
+    $del = 'position: absolute;
         bottom: 0;
         right: 0;
         border: solid;
@@ -60,7 +71,7 @@ $del = 'position: absolute;
         width: 30px;
         background-color: #000000;
         border-color: #f3dc0f;';
-$view = 'position: absolute;
+    $view = 'position: absolute;
         bottom: 0;
         right: 30px;
         border: solid;
@@ -69,55 +80,52 @@ $view = 'position: absolute;
         background-color: #000000;
         border-color: #f3dc0f;
         margin-right: 5px;';
+    ?>
 
-if (file_exists('img/page_' . $model->id)) {
-    $img = count(scandir('img/page_' . $model->id)) - 2;
-} else {
-    $img = 0;
-}
-?>
+    <?php for ($i = 0; $i < $img; $i++) : ?>
+        <div class="border" style="<?= $border ?>">
+            <img src="<?= $pic->imgList($_GET['id'])[$i] ?>" style="max-width: 150px; max-height: 150px;">
 
-<div style="max-width: 800px">
-<?php for ($i = 0; $i < $img; $i++) : ?>
-    <div class="border" style="<?= $border ?>">
-        <img src="<?= $pic->imgList($model->id)[$i] ?>" style="max-width: 150px; max-height: 150px;">
+            <div id="del">
+                <?php $span = '<span class="glyphicon glyphicon-remove" style="color: #f3dc0f; background-color: #000000;"></span>'; ?>
+                <?= Html::submitButton($span, ['style' => $del]) ?>
+            </div>
 
-        <div id="del">
-            <?php $span = '<span class="glyphicon glyphicon-remove" style="color: #f3dc0f; background-color: #000000;"></span>'; ?>
-            <form action="" method="post">
-                <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
-                <?= Html::submitButton($span, ['name' => 'delete',
-                    'value' => array_splice(scandir('img/page_' . $model->id), 2)[$i],
-                    'style' => $del
-                ]) ?>
-                <!-- <input type="submit" name="delete" value=""> -->
-            </form>
-
-
-        </div>
-
-        <div id="view">
-            <?php Modal::begin([
-                'size' => 'modal-lg',
-                'toggleButton' => [
-                    'label' => '<span class="glyphicon glyphicon-search" style="color: #f3dc0f; background-color: #000000;"></span>',
-                    'style' => $view,
-                ],
+            <div id="view">
+                <?php Modal::begin([
+                    'size' => 'modal-lg',
+                    'toggleButton' => [
+                        'label' => '<span class="glyphicon glyphicon-search" style="color: #f3dc0f; background-color: #000000;"></span>',
+                        'style' => $view,
+                        'onclick' => 'carouselOpen(' . $i . ')',
+                    ],
 //                'options' => ['style' => 'width: 500px;']
-            ]);
+                ]);
 
-            $items = $pic->carouselItems($i, $model->id);
-            echo Carousel::widget([
-                'items' => $items,
-                'options' => [
-                    'style' => 'width: 80%; height: 400px; margin: 0 auto;',
-                ],
-            ]);
+                echo $i;
+                $items = $pic->carouselItems($i, $_GET['id']);
+                echo Carousel::widget([
+                    'id' => 'car' . $i,
+                    'items' => $items,
+                    'options' => [
+                        'style' => 'width: 80%; height: 400px; margin: 0 auto;',
+                        'data-interval' => 'false',
+                    ],
+                ]); ?>
 
-            Modal::end(); ?>
+                <button onmouseover="getImage(<?= $i ?>)" id="av_<?= $i ?>"
+                        onclick="setAvatar(<?= $model->id ?>, <?= $i ?>)">AVATAR</button><br>
+
+                <form action="" method="post" id="fm">
+                    <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
+                    <input type="submit" name="del" value="DELETE" onmouseover="getImage(<?= $i ?>)">
+                    <input type="hidden" name="delete" value="HIDDEN" id="avatar_<?= $i ?>">
+                </form>
+
+                <?php Modal::end(); ?>
+            </div>
         </div>
-    </div>
-<?php endfor; ?>
+    <?php endfor; ?>
 </div>
 
 <div style="clear: both">

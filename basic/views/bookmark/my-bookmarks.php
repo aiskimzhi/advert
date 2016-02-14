@@ -11,13 +11,14 @@ use yii\helpers\Url;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'My Bookmarks';
+?>
 
-echo '<h2>My Bookmarks</h2>';
+<h2>My Bookmarks</h2>
 
-echo '<br>';
+<br>
 
-echo '<div id="gridVew">';
-echo GridView::widget([
+<div id="gridVew">
+<?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'showHeader' => false,
@@ -37,13 +38,14 @@ echo GridView::widget([
             'format' => 'html',
             'value' => function($searchModel) {
                 $href = Url::toRoute('advert/view?id=') . $searchModel->advert_id;
-                $text = '<div><strong><a href="' . $href . '"> ' . $searchModel->advert->title . '</a></strong></div>';
-                $text .= '<div>' . $searchModel->advert->category->name . ' » ' . $searchModel->advert->subcategory->name . '</div>';
-                $text .= '<br>';
-                $text .= '<br>';
-                $text .= '<div>' . $searchModel->advert->region->name . ', ' . $searchModel->advert->city->name . '</div>';
-                $format = 'd M Y, H:i';
-                $text .= date($format, $searchModel->advert->updated_at);
+                $text = '<div><strong><a href="' . $href . '"> ' . $searchModel->advert->title;
+                $text .= '</a></strong></div>';
+                $text .= '<div>' . $searchModel->advert->category->name . ' » ';
+                $text .= $searchModel->advert->subcategory->name . '</div>';
+                $text .= '<br><br>';
+                $text .= '<div>' . $searchModel->advert->region->name . ', ';
+                $text .= $searchModel->advert->city->name . '</div>';
+                $text .= date(Yii::$app->params['dateFormat'], $searchModel->advert->updated_at);
 
                 return $text;
             }
@@ -63,5 +65,5 @@ echo GridView::widget([
             'options' => ['style' => 'width: 50px; max-width: 50px;'],
         ],
     ],
-]);
-echo '</div>';
+]) ?>
+</div>

@@ -32,30 +32,3 @@ $this->title = 'Update data';
     </div>
     <?php ActiveForm::end(); ?>
 </div>
-
-<div>
-    <?php $f = ActiveForm::begin(['options' => ['class' => 'form-horizontal']]); ?>
-
-    <?= $f->field($model, 'first_name', [
-        'template' => '<div class="col-sm-2">{label}</div><div class="col-sm-10">{input}</div>',
-
-    ]) ?>
-
-    <?= $f->field($model, 'email') ?>
-
-    <?php ActiveForm::end(); ?>
-</div>
-
-
-
-<!--
-<div class="form-group">
-    <label class="col-sm-2 control-label">Label</label>
-    <div class="col-sm-10">
-        <input type="text" class="form-control" id=">
-    </div>
-</div>
-
-<div class="col-sm-2">{label}</div><div class="col-sm-10">{input}</div>
-
-<div class="col-sm-10"><input type="text" class="form-control"></div>

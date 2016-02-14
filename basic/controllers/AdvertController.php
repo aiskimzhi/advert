@@ -14,6 +14,7 @@ use app\models\Views;
 use Yii;
 use app\models\Advert;
 use app\models\AdvertSearch;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -33,6 +34,25 @@ class AdvertController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => [
+                    'index',
+                    'view',
+                    'file-upload',
+                    'update',
+                    'delete',
+                    'create',
+                    'my-adverts',
+                    'upload'
+                ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -373,5 +393,14 @@ class AdvertController extends Controller
         }
 
         return $this->render('upload', ['model' => $model]);
+    }
+
+    public function actionModal($id)
+    {
+        $advert = Advert::findOne(['id' => $id]);
+        $advert->avatar = $_POST['img'];
+        if ($advert->save()) {
+            echo 'disabled';
+        }
     }
 }

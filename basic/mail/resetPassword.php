@@ -4,17 +4,13 @@
 
 use yii\helpers\Html;
 
-echo 'Hello '.Html::encode($user->first_name).'. ';
+echo 'Hello ' . Html::encode($user->first_name) . ' ' . Html::encode($user->last_name) . '!';
 
-$a = '<a href="';
-$a .= Yii::$app->urlManager->createAbsoluteUrl(['/site/reset-password', 'token' => $user->password_reset_token]);
-$a .= '">follow the link</a>';
-
-echo $a;
-//echo Html::a('to change follow the link',
-//    Yii::$app->urlManager->createAbsoluteUrl(
-//        [
-//            '/site/reset-password',
-//            'token' => $user->password_reset_token
-//        ]
-//    ));
+echo Html::a('Follow the link to change your password',
+    Yii::$app->urlManager->createAbsoluteUrl(
+        [
+            'site/reset-password',
+            'key' => $user->secret_key,
+        ]
+    )
+);

@@ -190,3 +190,7 @@ h1 {
 .my-container {
     width: 790px;
 }
+
+.error {
+    height: 10px;
+}

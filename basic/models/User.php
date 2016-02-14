@@ -18,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property string $phone
  * @property string $auth_key
  * @property string $password_reset_token
+ * @property string $secret_key
  *
  * @property Advert[] $adverts
  * @property Bookmark[] $bookmarks
@@ -39,7 +40,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['first_name', 'last_name', 'password', 'email', 'auth_key', 'password_reset_token'], 'required'],
-            [['first_name', 'last_name', 'password', 'email', 'skype', 'phone', 'auth_key', 'password_reset_token'], 'string', 'max' => 255]
+            [['first_name', 'last_name', 'password', 'email', 'skype', 'phone', 'auth_key', 'password_reset_token'], 'string', 'max' => 255],
+            ['secret_key', 'string', 'max' => 64],
+            ['secret_key', 'unique']
         ];
     }
 
@@ -179,5 +182,49 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * Most of the methods bellow repeat the ones I've written before
+     * but for password_reset_token
+     */
+    public function generateSecretKey()
+    {
+        $this->secret_key = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    public function removeSecretKey()
+    {
+        $this->secret_key = null;
+    }
+
+    public static function isSecretKeyExpire($key)
+    {
+        if(empty($key)) {
+            return false;
+        }
+
+        $expire = Yii::$app->params['secretKeyExpire'];
+        $parts = explode('_', $key);
+        $timestamp = (int)end($parts);
+
+        if ($timestamp + $expire >= time()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function findBySecretKey($key)
+    {
+        if (!static::isSecretKeyExpire($key)) {
+            return null;
+        }
+
+        return static::findOne(
+            [
+                'secret_key' => $key,
+            ]
+        );
     }
 }

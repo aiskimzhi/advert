@@ -27,7 +27,8 @@ echo GridView::widget([
             'label' => 'image',
             'format' => 'raw',
             'value' => function($searchModel) {
-                return Html::img(Yii::$app->urlManager->createAbsoluteUrl($searchModel->picture($searchModel->id)), [
+                return Html::img(Yii::$app->urlManager
+                    ->createAbsoluteUrl($searchModel->picture($searchModel->id)), [
                     'style' => 'max-width: 120px;'
                 ]);
             },
@@ -38,13 +39,15 @@ echo GridView::widget([
             'format' => 'html',
             'value' => function($searchModel) {
                 $href = Url::toRoute('advert/view?id=') . $searchModel->id;
-                $text = '<div><strong><a href="' . $href . '"> ' . $searchModel->title . '</a></strong></div>';
-                $text .= '<div>' . $searchModel->category->name . ' » ' . $searchModel->subcategory->name . '</div>';
+                $text = '<div><strong><a href="';
+                $text .= $href . '"> ' . $searchModel->title . '</a></strong></div>';
+                $text .= '<div>' . $searchModel->category->name;
+                $text .= ' » ' . $searchModel->subcategory->name . '</div>';
                 $text .= '<br>';
                 $text .= '<br>';
-                $text .= '<div>' . $searchModel->region->name . ', ' . $searchModel->city->name . '</div>';
-                $format = 'd M Y, H:i';
-                $text .= date($format, $searchModel->updated_at);
+                $text .= '<div>' . $searchModel->region->name;
+                $text .= ', ' . $searchModel->city->name . '</div>';
+                $text .= date(Yii::$app->params['dateFormat'], $searchModel->updated_at);
 
                 return $text;
             }

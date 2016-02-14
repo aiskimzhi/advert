@@ -15,7 +15,6 @@ use yii\widgets\DetailView;
 
 $adv = new Advert();
 $form = ActiveForm::begin([
-//    'action' => Url::toRoute(['my-adverts']),
     'options' => ['enctype' => 'multipart/form-data'],
 ]);
 
@@ -24,9 +23,6 @@ echo $form->field($model, 'imageFiles[]')->widget(FileInput::classname(), [
     'pluginOptions' => ['previewFileType' => 'any']
 ]);
 
-//echo $form->field($adv, 'title')->textInput();
 echo Html::a('Skip this step', [Url::toRoute(['my-adverts'])], ['class' => 'btn btn-success']);
-//echo '<div class="form-group">' . Html::submitButton('Create Advert', ['class' => 'btn btn-success']) . '</div>';
 
 ActiveForm::end();
-

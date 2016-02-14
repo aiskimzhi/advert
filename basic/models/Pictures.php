@@ -43,8 +43,12 @@ class Pictures extends Advert
         $arr2 = array_splice($this->imgList($id), 0, $i);
         $array = array_merge($arr1, $arr2);
 
-        for ($i = 0; $i < count($array); $i++) {
-            $items[$i] =  Html::img($array[$i], ['style' => 'max-width: 600px; max-height: 400px; margin: 0 auto;']);
+        for ($j = 0; $j < count($array); $j++) {
+            $items[$j] =  Html::img($array[$j], [
+                'style' => 'max-width: 600px; max-height: 400px; margin: 0 auto;',
+                'class' => 'item',
+                'id' => $i . $j,
+            ]);
         }
 
         return $items;

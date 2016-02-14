@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Bookmark;
 use app\models\BookmarkSearch;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -18,6 +19,23 @@ class BookmarkController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => [
+                    'index',
+                    'view',
+                    'create',
+                    'update',
+                    'delete',
+                    'my-bookmarks'
+                ],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

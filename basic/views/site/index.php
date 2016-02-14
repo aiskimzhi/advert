@@ -4,6 +4,7 @@
 use app\models\Bookmark;
 use app\models\Pictures;
 use app\models\UploadForm;
+use app\models\User;
 use yii\bootstrap\Carousel;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
@@ -16,31 +17,63 @@ use yii\widgets\ActiveForm;
 $this->title = 'start again';
 $id = 1;
 $pic = new Pictures();
-$bookmark = Bookmark::find()->where([
-    'user_id' => Yii::$app->user->identity->getId(),
-    'advert_id' => 11
-])->one();
-$k = $bookmark->delete();
 
+//$h[] = '<img src="/img/page_3/1.jpg">';
+//$h[] = '<img src="/img/page_3/2.jpg">';
+//$h[] = '<img src="/img/page_3/3.png">';
+//$h[] = '<img src="/img/page_3/4.png">';
+//echo Carousel::widget([
+//    'items' => $h,
+//]);
+
+$items = [
+    [
+        'content' => '<img src="/img/page_3/1.jpg" id="pic1">',
+        'caption' => '<h4>Picture 1</h4><p>This is the caption text</p>',
+    ],
+    [
+        'content' => '<img src="/img/page_3/2.jpg">',
+        'caption' => '<h4>Picture 2</h4><p>This is the caption text</p>',
+    ],
+    [
+        'content' => '<img src="/img/page_3/3.png">',
+        'caption' => '<h4>Picture 3</h4><p>This is the caption text</p>',
+    ],
+    [
+        'content' => '<img src="/img/page_3/4.png">',
+        'caption' => '<h4>Picture 4</h4><p>This is the caption text</p>',
+    ]
+];
+echo Carousel::widget([
+    'items' => $items,
+    'options' => [
+        'style' => 'width: 80%; height: 400px; margin: 0 auto;',
+        'data-interval' => 'false',
+    ],
+]);
+?>
+
+
+<button onclick="alert(avatar())">HI</button>
+<form>
+    <input type="submit" name="name" value="HOHO" id="avatar">
+</form>
+
+<?php
+
+//$bookmark = Bookmark::find()->where([
+//    'user_id' => Yii::$app->user->identity->getId(),
+//    'advert_id' => 11
+//])->one();
+
+$k = array_splice(scandir('img/page_3'), 2);
+$max = count(scandir('img/page_3')) - 2;
+$n = $pic->carouselItems(1, 3);
+$z = ['&lsaquo;', '&rsaquo;'];
 echo '<pre>';
-var_dump($k);
+var_dump($z);
 echo '</pre>';
 
-var_dump(Yii::$app->params);
-echo '<br><br>';
-echo Yii::$app->params['maxPics'] . '<br><br>';
-$ext = 'kjhjka.png';
-$pos = strrpos($ext, '.');
-$t = substr($ext, $pos);
-var_dump($t);
-echo '<br><br>';
-var_dump(pathinfo($ext)['extension']);
-
-//$k = $pic->carouselItems(2, 1);
-//echo '<pre>';
-//var_dump($k);
-//echo '</pre>';
-echo '<br><br>';
 
 ?>
 <br><br>
@@ -76,7 +109,7 @@ $view = 'position: absolute;
 
 ?>
 
-<?php for ($i = 0; $i < 5; $i++) : ?>
+<?php for ($i = 0; $i < 6; $i++) : ?>
     <div class="border" style="<?= $border ?>">
         <img src="<?= $pic->imgList($id)[$i] ?>" style="max-width: 150px; max-height: 150px;">
 
@@ -95,11 +128,13 @@ $view = 'position: absolute;
 //                'options' => ['style' => 'width: 500px;']
             ]);
 
+            echo $i;
             $items = $pic->carouselItems($i, $id);
             echo Carousel::widget([
                 'items' => $items,
                 'options' => [
                     'style' => 'width: 80%; height: 400px; margin: 0 auto;',
+                    'data-interval' => 'false',
                 ],
             ]);
 
@@ -129,6 +164,6 @@ $view = 'position: absolute;
 </div>
 
 <form action="" method="post">
-    <?= Html::submitButton($span, ['name' => 'name', 'value' => 'value', 'style' => $del]) ?>
-    <!-- <input type="submit" name="delete" value=""> -->
+    <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
+    <input type="submit" name="but" value="EMAIL">
 </form>
