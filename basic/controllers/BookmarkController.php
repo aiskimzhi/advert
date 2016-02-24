@@ -193,4 +193,11 @@ class BookmarkController extends Controller
             'advert' => $advert,
         ]);
     }
+
+    public function actionDeleteBm($advert_id)
+    {
+        Bookmark::findOne(['advert_id' => $advert_id, 'user_id' => Yii::$app->user->identity->getId()])->delete();
+
+        return $this->redirect(['my-bookmarks']);
+    }
 }

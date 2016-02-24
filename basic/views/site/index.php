@@ -15,6 +15,8 @@ if (Yii::$app->user->isGuest) {
     $href = Url::toRoute(['advert/create']);
     $msg = 'CREATE YOUR ADVERT';
 }
+
+echo date(Yii::$app->params['dateFormat'], 1456272000);
 ?>
 
 <div class="jumbotron">

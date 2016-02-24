@@ -413,4 +413,9 @@ class AdvertController extends Controller
         }
         return false;
     }
+
+    public function actionTry()
+    {
+        return $this->render('try');
+    }
 }

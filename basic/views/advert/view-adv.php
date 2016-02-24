@@ -52,7 +52,7 @@ $view = 'position: absolute;
 if (isset($_GET['currency'])) {
     $cur = $_GET['currency'];
 } else {
-    $cur = 'usd';
+    $cur = $model->currency;
 }
 $currency = Currency::find()->where(['>', 'date', time()])->asArray()->one();
 
@@ -64,27 +64,14 @@ $dropDownItems = [
 ];
 
 $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 2);
+
+$contacts = [
+    'Phone: ' => $model->user->phone,
+    'Skype: ' => $model->user->skype,
+];
 ?>
 
 <div class="advert-view">
-    <div class="form-inline">
-        <form action="" method="get">
-            <label for="cur-drop" class="control-label">Select currency</label>
-            <select id="cur-drop" class="form-control" name="currency" onchange="this.form.submit()">
-                <?php
-                    foreach ($dropDownItems as $key => $val) {
-                        if ($key == $cur) {
-                            echo '<option value="' . $key . '" selected="">' . $val . '</option>';
-                        } else {
-                            echo '<option value="' . $key . '">' . $val . '</option>';
-                        }
-                    }
-                ?>
-            </select>
-
-            <input type="hidden" name="id" value="<?= $model->id ?>">
-        </form>
-    </div>
 
 <div><h4><?= $model->category->name ?>  » <?= $model->subcategory->name ?></h4></div>
 
@@ -93,10 +80,6 @@ $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 
 <h4><?= $model->region->name ?>, <?= $model->city->name ?></h4>
 
 <p><em>Last update: <?= date(Yii::$app->params['dateFormat'], $model->updated_at) ?></em></p>
-
-<div><?= $model->text ?></div>
-
-<div><h4><strong>Price: </strong><?= $price . ' ' . $dropDownItems[$cur] ?></h4></div>
 
 <div class="gallery" style="width: 70%; overflow: hidden; position: relative; display: block;">
 
@@ -129,13 +112,38 @@ $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 
         </div>
     <?php endfor; ?>
 </div>
+
+<div><?= $model->text ?></div>
+
+<div class="form-inline">
+    <form action="" method="get">
+        <label for="cur-drop" class="control-label"><h4>Price: <?= $price ?></h4></label>
+        <select id="cur-drop" class="form-control" name="currency" onchange="this.form.submit()">
+            <?php
+            foreach ($dropDownItems as $key => $val) {
+                if ($key == $cur) {
+                    echo '<option value="' . $key . '" selected="">' . $val . '</option>';
+                } else {
+                    echo '<option value="' . $key . '">' . $val . '</option>';
+                }
+            }
+            ?>
+        </select>
+        <input type="hidden" name="id" value="<?= $model->id ?>">
+    </form>
+</div>
+
 <br><br>
+
 <p style="clear: both"><em><strong>Contact the author: </strong></em></p>
 <p><strong>
     <a href="<?= Url::toRoute(['site/contact-author?id=']) . $model->id ?>">Write an email</a>
 </strong></p>
-<p><strong>Phone: </strong> <?= $model->user->phone ?></p>
-<p><strong>Skype: </strong> <?= $model->user->skype ?></p>
+<?php foreach ($contacts as $mean => $contact) : ?>
+    <?php if (!empty($contact)) : ?>
+        <p><strong><?= $mean ?></strong><?= $contact ?></p>
+    <?php endif; ?>
+<?php endforeach; ?>
 
 
 <p>

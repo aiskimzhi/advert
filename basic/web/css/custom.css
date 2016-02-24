@@ -236,3 +236,17 @@ h1 {
 a.navbar-brand {
     color: #fff;
 }
+
+
+.my-form-group {
+    vertical-align: top;
+}
+
+div.help-block {
+    height: 20px;
+}
+
+.my-error {
+    width: 340px;
+    margin-left: auto;
+}

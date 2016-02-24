@@ -126,4 +126,22 @@ class AdvertSearch extends Advert
 
         return $dataProvider;
     }
+
+    public function getMyBookmarks()
+    {
+        $book = Bookmark::find()->where(['user_id' => 1])->asArray()->all();
+        $n = count($book);
+        $arr = [];
+        for ($i = 0; $i < $n; $i++) {
+            $arr[$i] = $book[$i]['advert_id'];
+        }
+
+        $query = Advert::find()->andFilterWhere(['IN', 'id', $arr]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $dataProvider;
+    }
 }
