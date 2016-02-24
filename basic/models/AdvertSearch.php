@@ -21,6 +21,7 @@ class AdvertSearch extends Advert
             [['id', 'user_id', 'region_id', 'city_id', 'category_id', 'subcategory_id', 'created_at', 'updated_at', 'views'], 'integer'],
             [['title', 'text'], 'safe'],
             [['price'], 'number'],
+            ['currency', 'string', 'max' => 3],
         ];
     }
 

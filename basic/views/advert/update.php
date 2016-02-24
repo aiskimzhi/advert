@@ -15,46 +15,69 @@ $this->title = 'Update Advert: ' . ' ' . $model->title;
 ?>
 
 <div class="advert-update">
+
     <?php $form = ActiveForm::begin(['id' => 'form']); ?>
 
-    <?= $form->field($model, 'category_id')->dropDownList($catList,
-        [
-            'prompt'   => '- Choose a Category -',
-            'onchange' => '
-                            $.ajax({
-                                url: "' . Url::toRoute('get-subcat?id=') . '" + $(this).val(),
-                                success: function( data ) {
-                                    $( "#' . Html::getInputId($model, 'subcategory_id') . '" )
-                                    .html( data ).attr("disabled", false);
-                                }
-                            });
-                           '
-        ]) ?>
+        <div class="form-inline">
+            <?= $form->field($model, 'region_id')->dropDownList($regionList,
+                [
+                    'style' => 'width: 300px;',
+                    'onchange' => '
+                                    $.ajax({
+                                        url: "' . Url::toRoute('get-city?id=') . '" + $(this).val(),
+                                        success: function( data ) {
+                                            $( "#' . Html::getInputId($model, 'city_id') . '" )
+                                            .html( data ).attr("disabled", false);
+                                        }
+                                    });
+                                   '
+                ])->label('Location: ') ?>
 
-    <?= $form->field($model, 'subcategory_id')->dropDownList($subcatList) ?>
+            <?= $form->field($model, 'city_id')
+                ->dropDownList($cityList, ['style' => 'width: 300px;'])->label(false) ?>
+        </div>
 
-    <?= $form->field($model, 'region_id')->dropDownList($regionList,
-        [
-            'prompt'   => '- Choose a Region -',
-            'onchange' => '
-                            $.ajax({
-                                url: "' . Url::toRoute('get-city?id=') . '" + $(this).val(),
-                                success: function( data ) {
-                                    $( "#' . Html::getInputId($model, 'city_id') . '" )
-                                    .html( data ).attr("disabled", false);
-                                }
-                            });
-                           '
-        ]) ?>
+        <div class="form-inline">
+            <?= $form->field($model, 'category_id')->dropDownList($catList,
+                [
+                    'style' => 'width: 300px;',
+                    'onchange' => '
+                                    $.ajax({
+                                        url: "' . Url::toRoute('get-subcat?id=') . '" + $(this).val(),
+                                        success: function( data ) {
+                                            $( "#' . Html::getInputId($model, 'subcategory_id') . '" )
+                                            .html( data ).attr("disabled", false);
+                                        }
+                                    });
+                                   '
+                ])->label('Category: ') ?>
 
-    <?= $form->field($model, 'city_id')->dropDownList($cityList) ?>
-    <?= $form->field($model, 'title')->textInput() ?>
-    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
-    <?= $form->field($model, 'price')->textInput() ?>
+            <?= $form->field($model, 'subcategory_id')
+                ->dropDownList($subcatList, ['style' => 'width: 300px;'])->label(false) ?>
+        </div>
 
-    <div class="form-group">
-        <?= Html::submitButton('Update Advert', ['class' => 'btn btn-primary']) ?>
-    </div>
+        <div id="advert-create">
+            <?= $form->field($model, 'title')->textInput() ?>
+
+            <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
+
+            <div class="form-inline">
+                <?= $form->field($model, 'price')->textInput() ?>
+
+                <?= $form->field($model, 'currency')->dropDownList([
+                    '' => 'Select currency',
+                    'uan' => 'грн.',
+                    'rur' => 'руб.',
+                    'usd' => 'USD',
+                    'eur' => 'EURO',
+                ])->label(false) ?>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <?= Html::submitButton('Update Advert', ['class' => 'btn btn-primary']) ?>
+        </div>
 
     <?php ActiveForm::end(); ?>
 

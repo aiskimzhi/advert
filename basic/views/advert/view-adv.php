@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\DetailView;
+use app\models\Currency;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Advert */
@@ -36,21 +37,54 @@ $del = 'position: absolute;
         border: solid;
         height: 30px;
         width: 30px;
-        background-color: #000000;
-        border-color: #f3dc0f;';
+        background-color: #fff;
+        border-color: #337ab7;';
 $view = 'position: absolute;
         bottom: 0;
         right: 30px;
         border: solid;
         height: 30px;
         width: 30px;
-        background-color: #000000;
-        border-color: #f3dc0f;
+        background-color: #fff;
+        border-color: #337ab7;
         margin-right: 5px;';
 
+if (isset($_GET['currency'])) {
+    $cur = $_GET['currency'];
+} else {
+    $cur = 'usd';
+}
+$currency = Currency::find()->where(['>', 'date', time()])->asArray()->one();
+
+$dropDownItems = [
+    'uan' => 'грн.',
+    'rur' => 'руб.',
+    'usd' => 'USD',
+    'eur' => 'EURO',
+];
+
+$price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 2);
 ?>
 
 <div class="advert-view">
+    <div class="form-inline">
+        <form action="" method="get">
+            <label for="cur-drop" class="control-label">Select currency</label>
+            <select id="cur-drop" class="form-control" name="currency" onchange="this.form.submit()">
+                <?php
+                    foreach ($dropDownItems as $key => $val) {
+                        if ($key == $cur) {
+                            echo '<option value="' . $key . '" selected="">' . $val . '</option>';
+                        } else {
+                            echo '<option value="' . $key . '">' . $val . '</option>';
+                        }
+                    }
+                ?>
+            </select>
+
+            <input type="hidden" name="id" value="<?= $model->id ?>">
+        </form>
+    </div>
 
 <div><h4><?= $model->category->name ?>  » <?= $model->subcategory->name ?></h4></div>
 
@@ -62,37 +96,9 @@ $view = 'position: absolute;
 
 <div><?= $model->text ?></div>
 
+<div><h4><strong>Price: </strong><?= $price . ' ' . $dropDownItems[$cur] ?></h4></div>
 
 <div class="gallery" style="width: 70%; overflow: hidden; position: relative; display: block;">
-
-    <?php
-    $border = 'float: left;
-    border: solid;
-    border-width: 1px;
-    border-color: #808080;
-    width: 154px; max-width: 154px; min-width: 154px;
-    height: 190px; max-height: 190px; min-height: 190px;
-    position: relative;
-    margin-right: 5px;
-    margin-bottom: 5px;';
-    $del = 'position: absolute;
-    bottom: 0;
-    right: 0;
-    border: solid;
-    height: 30px;
-    width: 30px;
-    background-color: #000000;
-    border-color: #f3dc0f;';
-    $view = 'position: absolute;
-    bottom: 0;
-    right: 30px;
-    border: solid;
-    height: 30px;
-    width: 30px;
-    background-color: #000000;
-    border-color: #f3dc0f;
-    margin-right: 5px;';
-    ?>
 
     <?php for ($i = 0; $i < $img; $i++) : ?>
         <div class="border" style="<?= $border ?>">
@@ -102,7 +108,7 @@ $view = 'position: absolute;
                 <?php Modal::begin([
                     'size' => 'modal-lg',
                     'toggleButton' => [
-                        'label' => '<span class="glyphicon glyphicon-search" style="color: #f3dc0f; background-color: #000000;"></span>',
+                        'label' => '<span class="glyphicon glyphicon-eye-open" style="color: #337ab7; background-color: #fff;"></span>',
                         'style' => $del,
                         'onclick' => 'carouselOpen(' . $i . ')',
                     ],
@@ -137,7 +143,7 @@ $view = 'position: absolute;
 <?= Html::input('submit', 'button', $value,
     [
         'id' => 'book',
-        'class' => 'btn btn-create',
+        'class' => 'btn btn-primary',
         'onclick' => '
                         $.ajax({
                         url: "' . $url . '",

@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Bookmark;
 use app\models\Category;
 use app\models\City;
+use app\models\Currency;
 use app\models\Pictures;
 use app\models\Region;
 use app\models\Subcategory;
@@ -16,10 +17,7 @@ use app\models\Advert;
 use app\models\AdvertSearch;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Html;
 use yii\helpers\Json;
-use yii\helpers\Url;
-use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -68,6 +66,14 @@ class AdvertController extends Controller
      */
     public function actionIndex()
     {
+        if (Currency::find()->where(['>', 'date', time()])->orderBy(['date' => SORT_DESC])
+                ->asArray()->one() == null) {
+            $currency = new Currency;
+            if ($currency->exchangeRates()) {
+                Yii::$app->session->setFlash('warning', 'Exchange rates might differ from actual ones');
+            }
+        }
+
         $disabled_subcat = 'disabled';
         $disabled_city = 'disabled';
         $searchModel = new AdvertSearch();
@@ -122,22 +128,27 @@ class AdvertController extends Controller
      */
     public function actionView($id)
     {
+        if (Currency::find()->where(['>', 'date', time()])->orderBy(['date' => SORT_DESC])
+                ->asArray()->one() == null) {
+            $currency = new Currency;
+            if ($currency->exchangeRates()) {
+                Yii::$app->session->setFlash('warning', 'Exchange rates might differ from actual ones');
+            }
+        }
+
         $model = $this->findModel($id);
         $pic = new Pictures();
         $imgModel = new UploadForm();
 
         if ($model->user_id == Yii::$app->user->identity->getId()) {
-//            echo 'my'; die;
 
             if (isset($_POST['delete'])) {
                 $model->deletePic();
             }
 
             if (Yii::$app->request->isPost) {
-//                echo 'post'; die;
                 $imgModel->imageFiles = UploadedFile::getInstances($imgModel, 'imageFiles');
                 if ($imgModel->upload($id)) {
-//                    echo 'upload'; die;
                     return $this->render('view-my-advert', [
                         'model' => $this->findModel($id),
                         'imgModel' => $imgModel,
@@ -152,7 +163,6 @@ class AdvertController extends Controller
             ]);
         } else {
             $views = new Views();
-//            $bookmark = new Bookmark();
             $n = Bookmark::find()->where(['user_id' => Yii::$app->user->identity->getId(), 'advert_id' => $id])->all();
 
             if (!empty($n)) {
@@ -182,10 +192,6 @@ class AdvertController extends Controller
 
     public function actionFileUpload($id)
     {
-//        VarDumper::dump($_POST, true);
-//        die;
-        //$model = $this->findModel($id);
-        $pic = new Pictures();
         $imgModel = new UploadForm();
 
         if (Yii::$app->request->isPost) {
@@ -196,8 +202,8 @@ class AdvertController extends Controller
         }
 
         echo Json::encode(['upload'=>'false']);
-
     }
+
     /**
      * Updates an existing Advert model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -361,6 +367,14 @@ class AdvertController extends Controller
 
     public function actionMyAdverts()
     {
+        if (Currency::find()->where(['>', 'date', time()])->orderBy(['date' => SORT_DESC])
+                ->asArray()->one() == null) {
+            $currency = new Currency;
+            if ($currency->exchangeRates()) {
+                Yii::$app->session->setFlash('warning', 'Exchange rates might differ from actual ones');
+            }
+        }
+
         $searchModel = new AdvertSearch();
         $dataProvider = $searchModel->getMyAdverts();
 
@@ -374,17 +388,16 @@ class AdvertController extends Controller
     {
         $model = new UploadForm();
         $advert = Advert::find()
-        ->where(['user_id' => Yii::$app->user->identity->getId()])
-        ->orderBy('id DESC')
-        ->asArray()
-        ->one();
+            ->where(['user_id' => Yii::$app->user->identity->getId()])
+            ->orderBy('id DESC')
+            ->asArray()
+            ->one();
         $id = $advert['id'];
 
         if (Yii::$app->request->isPost) {
             $model->imageFiles = UploadedFile::getInstances($model, 'imageFiles');
             if ($model->upload($id)) {
-                // file is uploaded successfully
-                return $this->render('upload', ['model' => $model]);
+                return $this->redirect('view?id=' . $id);
             }
         }
 

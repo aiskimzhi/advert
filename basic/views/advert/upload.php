@@ -23,6 +23,6 @@ echo $form->field($model, 'imageFiles[]')->widget(FileInput::classname(), [
     'pluginOptions' => ['previewFileType' => 'any']
 ]);
 
-echo Html::a('Skip this step', [Url::toRoute(['my-adverts'])], ['class' => 'btn btn-success']);
+echo Html::a('Skip this step', [Url::toRoute(['my-adverts'])], ['class' => 'btn btn-primary']);
 
 ActiveForm::end();

@@ -14,16 +14,16 @@ $this->title = 'My Account';
 
     <div id="left-menu">
         <?= Html::a('My Adverts',
-            [Url::toRoute('advert/my-adverts')],
+            [Url::toRoute(['advert/my-adverts'])],
             ['class' => 'btn btn-info my-200']) ?>
         <?= Html::a('My Bookmarks',
-            [Url::toRoute('bookmark/my-bookmarks')],
+            [Url::toRoute(['bookmark/my-bookmarks'])],
             ['class' => 'btn btn-info my-200'])?>
         <?= Html::a('Update data',
-            [Url::toRoute('user/update-data')],
+            [Url::toRoute('update-data')],
             ['class' => 'btn btn-info my-200']) ?>
         <?= Html::a('Change password',
-            [Url::toRoute('user/change-password')],
+            [Url::toRoute('change-password')],
             ['class' => 'btn btn-info my-200'])?>
         <?= Html::a('Delete account', ['delete-account'], [
             'class' => 'btn btn-info my-200 my-del',
@@ -43,7 +43,7 @@ $this->title = 'My Account';
     </div>
 
     <div id="create-adv">
-        <?= Html::a('Create Advert', [Url::toRoute('advert/create')],
+        <?= Html::a('Create Advert', [Url::toRoute(['advert/create'])],
             ['class' => 'btn btn-primary btn-cr-adv']) ?>
     </div>
 

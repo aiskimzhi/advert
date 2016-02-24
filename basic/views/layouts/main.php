@@ -68,14 +68,14 @@ AppAsset::register($this);
         <?= $content ?>
     </div>
 </div>
-<!--
+
 <pre>
     POST:
     <?php print_r($_POST); ?>
     GET:
     <?php print_r($_GET); ?>
 </pre>
--->
+
 
 <footer class="footer">
     <div class="container">

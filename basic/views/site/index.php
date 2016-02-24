@@ -2,6 +2,8 @@
 
 /* @var $this yii\web\View */
 
+use app\models\Currency;
+use app\models\Views;
 use yii\helpers\Url;
 
 $this->title = 'start again';

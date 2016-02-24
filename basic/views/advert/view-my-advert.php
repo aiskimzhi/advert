@@ -69,16 +69,16 @@ if (file_exists('img/page_' . $model->id)) {
         border: solid;
         height: 30px;
         width: 30px;
-        background-color: #000000;
-        border-color: #f3dc0f;';
+        background-color: #fff;
+        border-color: #337ab7;';
     $view = 'position: absolute;
         bottom: 0;
         right: 30px;
         border: solid;
         height: 30px;
         width: 30px;
-        background-color: #000000;
-        border-color: #f3dc0f;
+        background-color: #fff;
+        border-color: #337ab7;
         margin-right: 5px;';
     ?>
 
@@ -87,7 +87,7 @@ if (file_exists('img/page_' . $model->id)) {
             <img src="<?= $pic->imgList($_GET['id'])[$i] ?>" style="max-width: 150px; max-height: 150px;">
 
             <div id="del">
-                <?php $span = '<span class="glyphicon glyphicon-remove" style="color: #f3dc0f; background-color: #000000;"></span>'; ?>
+                <?php $span = '<span class="glyphicon glyphicon-trash" style="color: #337ab7; background-color: #fff;"></span>'; ?>
                 <?= Html::submitButton($span, ['style' => $del]) ?>
             </div>
 
@@ -95,7 +95,7 @@ if (file_exists('img/page_' . $model->id)) {
                 <?php Modal::begin([
                     'size' => 'modal-lg',
                     'toggleButton' => [
-                        'label' => '<span class="glyphicon glyphicon-search" style="color: #f3dc0f; background-color: #000000;"></span>',
+                        'label' => '<span class="glyphicon glyphicon-eye-open" style="color: #337ab7; background-color: #fff;"></span>',
                         'style' => $view,
                         'onclick' => 'carouselOpen(' . $i . ')',
                     ],
@@ -111,14 +111,23 @@ if (file_exists('img/page_' . $model->id)) {
                     ],
                 ]); ?>
 
-                <button onmouseover="getImage(<?= $i ?>)" id="av_<?= $i ?>"
-                        onclick="setAvatar(<?= $model->id ?>, <?= $i ?>)">AVATAR</button><br>
+        <div style="width: 80%; position: relative; height: 100px; margin: 0 auto; padding-top: 10px;">
+            <div style="margin: 0 0 auto auto; width: 171px; height: 40px;">
+            <button onmouseover="getImage(<?= $i ?>)" id="av_<?= $i ?>"
+                    onclick="setAvatar(<?= $model->id ?>, <?= $i ?>)"
+                    class="btn btn-primary">Set as the main picture</button>
+            </div>
 
-                <form action="" method="post" id="fm">
-                    <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
-                    <input type="submit" name="del" value="DELETE" onmouseover="getImage(<?= $i ?>)">
-                    <input type="hidden" name="delete" value="HIDDEN" id="avatar_<?= $i ?>">
-                </form>
+            <div style="margin: 0 0 auto auto; width: 171px; height: 40px;">
+            <form action="" method="post" id="fm">
+                <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>">
+                <input type="submit" name="del" value="Delete picture"
+                       onmouseover="getImage(<?= $i ?>)"
+                       class="btn btn-danger" style="width: 171px;">
+                <input type="hidden" name="delete" value="HIDDEN" id="avatar_<?= $i ?>">
+            </form>
+            </div>
+        </div>
 
                 <?php Modal::end(); ?>
             </div>

@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Currency;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -11,6 +12,26 @@ use yii\jui\DatePicker;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Adverts';
+$dropDownItems = [
+    'default' => 'Select currency',
+    'uan' => 'грн.',
+    'rur' => 'руб.',
+    'usd' => 'USD',
+    'eur' => 'EURO',
+];
+if (isset($_GET['currency']) && $_GET['currency'] !== 'default') {
+    $cur = $_GET['currency'];
+} else {
+    $cur = '';
+}
+
+$sortBy = [
+    '' => 'Sort by: ',
+    '-updated_at' => 'Date decrement',
+    'updated_at' => 'Date increment',
+    '-u_price' => 'Price decrement',
+    'u_price' => 'Price increment',
+];
 ?>
 
 <div class="advert-index">
@@ -101,6 +122,38 @@ $this->title = 'Adverts';
 
 <?php ActiveForm::end(); ?>
 
+<div class="form-inline">
+    <div class="form-group">
+        <form action="" method="get" id="currency-show">
+            <!-- <label for="cur-drop" class="control-label">Select currency</label> -->
+            <select id="cur-drop" class="form-control" name="currency" onchange="this.form.submit()">
+                <?php foreach ($dropDownItems as $key => $val) : ?>
+                    <?php if ($key == $cur) : ?>
+                        <option value="<?= $key ?>" selected=""><?= $val ?></option>
+                    <?php else : ?>
+                        <option value="<?= $key ?>"><?= $val ?></option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+        </form>
+    </div>
+
+    <div class="form-group">
+        <form action="" method="get" id="sort">
+            <!-- <label for="sort-drop" class="control-label">Sort by: </label> -->
+            <select id="sort-drop" class="form-control" name="sort" onchange="this.form.submit()">
+                <?php foreach ($sortBy as $col => $change) : ?>
+                    <?php if (isset($_GET['sort']) && $_GET['sort'] == $col) : ?>
+                        <option value="<?= $col ?>" selected=""><?= $change ?></option>
+                    <?php else : ?>
+                        <option value="<?= $col ?>"><?= $change ?></option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+        </form>
+    </div>
+</div>
+
 <div id="gridVew">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -145,8 +198,20 @@ $this->title = 'Adverts';
                 'attribute' => 'price',
                 'format' => 'html',
                 'value' => function($searchModel) {
-                    $value = '<h4><strong>' . $searchModel->price . ' USD</strong></h4>';
-                    return $value;
+                    $currency = Currency::find()->where(['>', 'date', time()])->asArray()->one();
+                    $dropDownItems = [
+                        'uan' => 'грн.',
+                        'rur' => 'руб.',
+                        'usd' => 'USD',
+                        'eur' => 'EURO',
+                    ];
+                    if (isset($_GET['currency']) && $_GET['currency'] !== 'default') {
+                        $cur = $_GET['currency'];
+                    } else {
+                        $cur = $searchModel->currency;
+                    }
+                    $price = round($searchModel->price * ($currency[$searchModel->currency] / $currency[$cur]), 2);
+                    return '<h4><strong>' . $price . ' ' . $dropDownItems[$cur] . '</strong></h4>';
                 },
                 'options' => ['style' => 'width: 130px; max-width: 130px;'],
             ],

@@ -3,10 +3,14 @@
 namespace app\controllers;
 
 use app\models\Advert;
+use app\models\Category;
+use app\models\Currency;
+use app\models\Region;
 use Yii;
 use app\models\Bookmark;
 use app\models\BookmarkSearch;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -157,12 +161,36 @@ class BookmarkController extends Controller
 
     public function actionMyBookmarks()
     {
+        if (Currency::find()->where(['>', 'date', time()])->orderBy(['date' => SORT_DESC])
+                ->asArray()->one() == null) {
+            $currency = new Currency;
+            if ($currency->exchangeRates()) {
+                Yii::$app->session->setFlash('warning', 'Exchange rates might differ from actual ones');
+            }
+        }
+
+        $disabled_subcat = 'disabled';
+        $disabled_city = 'disabled';
+
+        $catList = ArrayHelper::map(Category::find()->asArray()->all(), 'id', 'name');
+        $regionList = ArrayHelper::map(Region::find()->asArray()->all(), 'id', 'name');
+        $subcatList = [];
+        $cityList = [];
+
         $searchModel = new BookmarkSearch();
         $dataProvider = $searchModel->getMyBookmarks();
+        $advert = new Advert();
 
         return $this->render('my-bookmarks', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'catList' => $catList,
+            'subcatList' => $subcatList,
+            'regionList' => $regionList,
+            'cityList' => $cityList,
+            'disabled_subcat' => $disabled_subcat,
+            'disabled_city' => $disabled_city,
+            'advert' => $advert,
         ]);
     }
 }

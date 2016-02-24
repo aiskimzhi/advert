@@ -84,3 +84,15 @@ function setAvatar(id, i)
         data: 'img=' + p
     });
 }
+
+function currency(id)
+{
+    var a = $(this).val();
+    $.ajax({
+        url: 'currency?id=' + id,
+        type: 'post',
+        success: function( data ) {
+            $('select').html( data ).attr('name', a);
+        }
+    });
+}

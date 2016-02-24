@@ -110,7 +110,18 @@ $this->title = 'Create Advert';
 
     <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'price')->textInput() ?>
+    <div class="form-inline">
+        <?= $form->field($model, 'price')->textInput() ?>
+
+        <?= $form->field($model, 'currency')->dropDownList([
+            '' => 'Select currency',
+            'uan' => 'грн.',
+            'rur' => 'руб.',
+            'usd' => 'USD',
+            'eur' => 'EURO',
+        ])->label(false) ?>
+    </div>
+
 </div>
 
 <div class="form-group">

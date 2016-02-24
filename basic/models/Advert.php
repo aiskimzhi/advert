@@ -22,6 +22,8 @@ use yii\base\Model;
  * @property string $title
  * @property string $text
  * @property string $price
+ * @property string $currency
+ * @property string $u_price
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $views
@@ -52,7 +54,7 @@ class Advert extends ActiveRecord
     public function rules()
     {
         return [
-            [['region_id', 'city_id', 'category_id', 'subcategory_id', 'title', 'text', 'price'], 'required'],
+            [['region_id', 'city_id', 'category_id', 'subcategory_id', 'title', 'text', 'price', 'currency'], 'required'],
             [['user_id', 'region_id', 'city_id', 'category_id', 'subcategory_id', 'created_at', 'updated_at', 'views'], 'integer'],
             [['text'], 'string'],
             [['price'], 'number'],
@@ -134,6 +136,7 @@ class Advert extends ActiveRecord
      */
     public function createAdvert()
     {
+        $currency = Currency::find()->where(['date' => 0])->asArray()->one();
         if ($this->validate()) {
             $advert = new Advert;
             $advert->user_id = Yii::$app->user->identity->getId();
@@ -144,6 +147,8 @@ class Advert extends ActiveRecord
             $advert->title = $this->title;
             $advert->text = $this->text;
             $advert->price = $this->price;
+            $advert->currency = $this->currency;
+            $advert->u_price = $this->price * $currency[$this->currency];
             $advert->created_at = time();
             $advert->updated_at = time();
             $advert->views = 0;
