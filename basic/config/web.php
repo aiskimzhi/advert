@@ -6,7 +6,13 @@ $config = [
     'id' => 'basic',
 //    'layout' => 'my-layout',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+//    'bootstrap' => ['log'],
+	'bootstrap' => ['debug'],
+	'modules' => [
+        'debug' => [
+            'class' => 'yii\debug\Module',
+        ],
+    ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
