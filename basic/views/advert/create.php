@@ -15,40 +15,6 @@ use yii\widgets\DetailView;
 $this->title = 'Create Advert';
 ?>
 
-<div>
-    <?= DetailView::widget([
-    'model' => $user,
-    'options' => [
-        'width' => '300px',
-        'class' => 'contacts'
-    ],
-    'template' => '<tr><td style="max-width: 150px;"><strong>{label}</strong> {value}</td></tr>',
-    'attributes' => [
-        [
-            'label' => '<h4 class="text-center"><em>Your contacts: </em></h4>',
-            'value' => '',
-        ],
-        [
-            'label' => 'Phone: ',
-            'value' => $user->phone
-        ],
-        [
-            'label' => 'Skype: ',
-            'value' => $user->skype
-        ],
-        [
-            'label' => 'E-mail: ',
-            'value' => $user->email
-        ],
-        [
-            'label' => 'To change your contact information follow the link: <a href="'
-                . Url::toRoute('user/update-data') . '">Update contact information</a>',
-            'value' => '',
-        ],
-    ]
-]) ?>
-</div>
-<br>
 
 <?php $form = ActiveForm::begin(['id' => 'create-advert-form']); ?>
 
@@ -117,7 +83,7 @@ $this->title = 'Create Advert';
             'uan' => 'грн.',
             'rur' => 'руб.',
             'usd' => 'USD',
-            'eur' => 'EURO',
+            'eur' => 'EUR',
         ])->label(false) ?>
     </div>
 

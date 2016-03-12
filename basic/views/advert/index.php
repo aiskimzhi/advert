@@ -25,7 +25,7 @@ $dropDownItems = [
     'uan' => 'грн.',
     'rur' => 'руб.',
     'usd' => 'USD',
-    'eur' => 'EURO',
+    'eur' => 'EUR',
 ];
 if (isset($_GET['currency']) && $_GET['currency'] !== 'default') {
     $cur = $_GET['currency'];
@@ -103,7 +103,14 @@ $sortBy = [
         'value' => $beforeValue,
         'name' => 'before',
         'id' => 'before-field',
-        'options' => ['class' => 'form-control', 'style' => 'width: 220px;']
+        'options' => [
+            'class' => 'form-control',
+            'style' => 'width: 220px;',
+            'onchange' => 'setMinDate()'
+        ],
+        'clientOptions' => [
+            'maxDate' => 'new Date(0)',
+        ]
     ]) ?>
 
     <label class="control-label" for="after-field">To: </label>
@@ -111,13 +118,13 @@ $sortBy = [
         'value' => $afterValue,
         'name' => 'after',
         'id' => 'after-field',
-        'options' => ['class' => 'form-control', 'style' => 'width: 220px;']
+        'options' => ['class' => 'form-control', 'style' => 'width: 220px;'],
+        'clientOptions' => [
+            'maxDate' => 'new Date(0)',
+        ]
     ]) ?>
-    <?= Html::submitButton('Other period', [
-        'class' => 'btn btn-primary',
-        'name' => 'period',
-        'value' => 'period'
-    ]) ?>
+
+    <a onclick="resetDate()" class="btn btn-primary">Other period</a>
 </div>
 <br>
 
@@ -167,6 +174,7 @@ $sortBy = [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'showHeader' => false,
+        'summaryOptions'=> ['style' => 'margin-bottom: 15px; margin-top: 20px;'],
         'columns' => [
             [
                 'label' => 'image',

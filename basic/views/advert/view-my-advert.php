@@ -15,6 +15,7 @@ use kartik\file\FileInput;
 /* @var $this yii\web\View */
 /* @var $model app\models\Advert */
 /* @var $imgModel app\models\UploadForm */
+/* @var $value */
 
 $this->title = $model->title;
 
@@ -29,7 +30,7 @@ $dropDownItems = [
     'uan' => 'грн.',
     'rur' => 'руб.',
     'usd' => 'USD',
-    'eur' => 'EURO',
+    'eur' => 'EUR',
 ];
 
 $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 2);
@@ -81,11 +82,13 @@ $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 
         background-color: #fff;
         border-color: #337ab7;
         margin-right: 5px;';
+$s = 'background-size: cover;
+        width: 150px;
+        height: 150px;';
 ?>
 
     <?php for ($i = 0; $i < $img; $i++) : ?>
         <div class="border" style="<?= $border ?>">
-            <img src="<?= $pic->imgList($_GET['id'])[$i] ?>" style="max-width: 150px; max-height: 150px;">
 
             <div id="del">
                 <?php $span = '<span class="glyphicon glyphicon-trash" style="color: #337ab7; background-color: #fff;"></span>'; ?>
@@ -96,8 +99,9 @@ $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 
                 <?php Modal::begin([
                     'size' => 'modal-lg',
                     'toggleButton' => [
-                        'label' => '<span class="glyphicon glyphicon-eye-open" style="color: #337ab7; background-color: #fff;"></span>',
-                        'style' => $view,
+                        'label' => '',
+                        'style' => 'background: url(' . $pic->imgList($_GET['id'])[$i] . ') no-repeat 50%;' . $s,
+                        'class' => 'carousel-but',
                         'onclick' => 'carouselOpen(' . $i . ')',
                     ],
                 ]);
@@ -153,7 +157,7 @@ $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 
 <?php ActiveForm::end(); ?>
 
 
-<div><?= $model->text ?></div>
+<div style="border: solid 2px #d9e9ff; background-color: #e9e9e9;"><?= $model->text ?></div>
 
 <div class="form-inline">
     <form action="" method="get">
@@ -173,15 +177,29 @@ $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 
     </form>
 </div>
 
-<div>
+<div style="margin-top: 25px; margin-bottom: 20px;">
     <p style="clear: both"><em><strong>My contacts: </strong></em></p>
     <p><strong>E-mail: </strong><?= $model->user->email ?></p>
     <p><strong>Phone: </strong><?= $model->user->phone ?></p>
     <p><strong>Skype: </strong><?= $model->user->skype ?></p>
-    <p><a href="<?= Url::toRoute(['user/update-data']) ?>"><strong>You can update your contacts here</strong></a></p>
 </div>
 
 <div style="clear: both">
+    <?php $url = Url::toRoute('bookmark/add-to-bookmarks?id=') . $model->id; ?>
+    <?= Html::input('submit', 'button', $value,
+        [
+            'id' => 'book',
+            'class' => 'btn btn-primary',
+            'onclick' => '
+                        $.ajax({
+                        url: "' . $url . '",
+                        success: function ( data ) {
+                            $( "#book" ).html( data ).attr("value", data );
+                        }
+                        })
+                    '
+        ])
+    ?>
     <?= Html::a('Update advert', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
     <?= Html::a('Delete advert', ['delete', 'id' => $model->id], [
         'class' => 'btn btn-danger',

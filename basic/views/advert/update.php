@@ -69,7 +69,7 @@ $this->title = 'Update Advert: ' . ' ' . $model->title;
                     'uan' => 'грн.',
                     'rur' => 'руб.',
                     'usd' => 'USD',
-                    'eur' => 'EURO',
+                    'eur' => 'EUR',
                 ])->label(false) ?>
             </div>
 

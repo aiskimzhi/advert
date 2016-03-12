@@ -96,3 +96,20 @@ function currency(id)
         }
     });
 }
+
+function setMinDate()
+{
+    var selected = $('#before-field').datepicker('getDate');
+    var n = selected.toString();
+    var a = [];
+    a = n.split(' ');
+    var b = a[1] + ' ' + a[2] + ', ' + a[3];
+
+    return $('#after-field').datepicker('option', 'minDate', b);
+}
+
+function resetDate()
+{
+    $('#before-field').datepicker('setDate', null);
+    $('#after-field').datepicker('setDate', null);
+}

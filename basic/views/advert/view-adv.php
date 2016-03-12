@@ -48,6 +48,9 @@ $view = 'position: absolute;
         background-color: #fff;
         border-color: #337ab7;
         margin-right: 5px;';
+$s = 'background-size: cover;
+        width: 150px;
+        height: 150px;';
 
 if (isset($_GET['currency'])) {
     $cur = $_GET['currency'];
@@ -60,7 +63,7 @@ $dropDownItems = [
     'uan' => 'грн.',
     'rur' => 'руб.',
     'usd' => 'USD',
-    'eur' => 'EURO',
+    'eur' => 'EUR',
 ];
 
 $price = round($model->price * ($currency[$model->currency] / $currency[$cur]), 2);
@@ -85,14 +88,14 @@ $contacts = [
 
     <?php for ($i = 0; $i < $img; $i++) : ?>
         <div class="border" style="<?= $border ?>">
-            <img src="<?= $pic->imgList($_GET['id'])[$i] ?>" style="max-width: 150px; max-height: 150px;">
 
             <div id="view">
                 <?php Modal::begin([
                     'size' => 'modal-lg',
                     'toggleButton' => [
-                        'label' => '<span class="glyphicon glyphicon-eye-open" style="color: #337ab7; background-color: #fff;"></span>',
-                        'style' => $del,
+                        'label' => '',
+                        'style' => 'background: url(' . $pic->imgList($_GET['id'])[$i] . ') no-repeat 50%;' . $s,
+                        'class' => 'carousel-but',
                         'onclick' => 'carouselOpen(' . $i . ')',
                     ],
                 ]);
@@ -113,7 +116,7 @@ $contacts = [
     <?php endfor; ?>
 </div>
 
-<div><?= $model->text ?></div>
+<div style="border: solid 2px #d9e9ff; background-color: #e9e9e9;"><?= $model->text ?></div>
 
 <div class="form-inline">
     <form action="" method="get">

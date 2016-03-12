@@ -140,10 +140,20 @@ class AdvertController extends Controller
         $pic = new Pictures();
         $imgModel = new UploadForm();
 
+        $n = Bookmark::find()->where(['user_id' => Yii::$app->user->identity->getId(), 'advert_id' => $id])->all();
+
+
+
         if ($model->user_id == Yii::$app->user->identity->getId()) {
 
             if (isset($_POST['delete'])) {
                 $model->deletePic();
+            }
+
+            if (!empty($n)) {
+                $value = 'Delete ' . 'from bookmarks';
+            } else {
+                $value = 'Add to bookmarks';
             }
 
             if (Yii::$app->request->isPost) {
@@ -160,6 +170,7 @@ class AdvertController extends Controller
                 'model' => $this->findModel($id),
                 'imgModel' => $imgModel,
                 'pic' => $pic,
+                'value' => $value,
             ]);
         } else {
             $views = new Views();
